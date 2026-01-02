@@ -1,0 +1,10 @@
+ag-ui-adk
+google-adk
+fastapi
+litellm
+python-dotenv
+pydantic
+uvicorn
+
+[local]
+watchfiles

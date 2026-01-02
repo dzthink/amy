@@ -1,0 +1,35 @@
+[project]
+name = "amy-agent-core"
+version = "0.1.0"
+description = "ADK-based agent core for local Markdown workflows."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+
+dependencies = [
+  "ag-ui-adk",
+  "google-adk",
+  "fastapi",
+  "litellm",
+  "python-dotenv",
+  "pydantic",
+  "uvicorn"
+]
+
+[project.optional-dependencies]
+local = [
+  "watchfiles"
+]
+
+[project.scripts]
+amy-agent-core = "agent_core.server:main"
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

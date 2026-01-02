@@ -1,0 +1,2 @@
+[console_scripts]
+amy-agent-core = agent_core.server:main
