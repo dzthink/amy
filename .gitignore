@@ -1,0 +1,8 @@
+.DS_Store
+.env
+.venv
+__pycache__/
+*.pyc
+web/node_modules/
+ami/.langgraph_api/*
+web/apps/agents/node_modules/
