@@ -1,39 +1,39 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ui_name="${UI_NAME:-agent-chat-ui}"
-if [ -f "web/package.json" ]; then
-  ui_dir="web"
-else
-  ui_dir="web/${ui_name}"
-fi
-langgraph_config="ami/langgraph.json"
+root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$root_dir"
 
-if [ ! -d "$ui_dir" ]; then
-  echo "UI directory not found: $ui_dir" >&2
-  echo "Run ./scripts/setup_ui.sh first." >&2
-  exit 1
-fi
-
-if [ ! -f "$langgraph_config" ]; then
-  echo "LangGraph config not found: $langgraph_config" >&2
+if [ ! -f "ami/langgraph.json" ]; then
+  echo "Missing ami/langgraph.json" >&2
   exit 1
 fi
 
 assistant_id="$(python3 - <<'PY'
 import json
-with open("ami/langgraph.json", "r", encoding="utf-8") as f:
-    data = json.load(f)
+
+with open("ami/langgraph.json", "r", encoding="utf-8") as handle:
+    data = json.load(handle)
+
 graphs = data.get("graphs", {})
-print(next(iter(graphs.keys()), "ami"))
+print(next(iter(graphs.keys()), ""))
 PY
 )"
 
-base_url="${LANGGRAPH_BASE_URL:-http://127.0.0.1:2024}"
+if [ -z "$assistant_id" ]; then
+  echo "No graph id found in ami/langgraph.json" >&2
+  exit 1
+fi
 
-cat > "${ui_dir}/.env.local" <<EOF
-NEXT_PUBLIC_LANGGRAPH_BASE_URL="${base_url}"
-NEXT_PUBLIC_LANGGRAPH_ASSISTANT_ID="${assistant_id}"
-EOF
+deployment_url="${LANGGRAPH_API_URL:-http://127.0.0.1:2024}"
+out_file="web/.env.local"
 
-echo "Wrote ${ui_dir}/.env.local"
+{
+  echo "NEXT_PUBLIC_LANGGRAPH_API_URL=$deployment_url"
+  echo "NEXT_PUBLIC_LANGGRAPH_ASSISTANT_ID=$assistant_id"
+  if [ -n "${NEXT_PUBLIC_LANGSMITH_API_KEY:-}" ]; then
+    echo "NEXT_PUBLIC_LANGSMITH_API_KEY=$NEXT_PUBLIC_LANGSMITH_API_KEY"
+  fi
+} > "$out_file"
+
+echo "Wrote $out_file"

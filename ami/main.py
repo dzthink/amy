@@ -1,8 +1,6 @@
 import argparse
-import os
 import sys
 
-from dotenv import load_dotenv
 from .agent import build_agent
 
 
@@ -10,9 +8,6 @@ def main():
     parser = argparse.ArgumentParser(description="Run ami (minimal Deep Agents flow).")
     parser.add_argument("prompt", nargs="*", help="User message for ami")
     args = parser.parse_args()
-
-    env_path = os.path.join(os.path.dirname(__file__), ".env")
-    load_dotenv(env_path)
 
     if not args.prompt:
         print("Please provide a prompt, e.g.: python -m ami '你好，帮我规划本周学习任务'", file=sys.stderr)

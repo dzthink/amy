@@ -22,8 +22,10 @@ web/                    # UI workspace (agent chat UI lives here)
 uv venv .venv
 uv pip install -r ami/requirements.txt --python .venv/bin/python
 
-cp ami/.env.example ami/.env
-# edit ami/.env and set DEEPSEEK_API_KEY (or OPENAI_API_KEY)
+# export env vars (see ami/.env.example for sample values)
+# export DEEPSEEK_API_KEY=...
+# export DEEPSEEK_BASE_URL=https://api.deepseek.com
+# export AMI_LLM_MODEL=openai:deepseek-chat
 
 python -m ami "你好，帮我规划本周学习任务"
 ```
@@ -55,4 +57,20 @@ Use Assistant ID `ami` (from `ami/langgraph.json`).
 
 ```bash
 ./scripts/dev.sh
+```
+
+## UI + Agent Integration
+
+The UI reads the LangGraph deployment URL and assistant ID from either local
+storage or environment variables:
+
+```
+NEXT_PUBLIC_LANGGRAPH_API_URL=http://127.0.0.1:2024
+NEXT_PUBLIC_LANGGRAPH_ASSISTANT_ID=ami
+```
+
+You can generate `web/.env.local` with:
+
+```bash
+./scripts/sync_ui_config.sh
 ```

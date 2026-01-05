@@ -16,6 +16,6 @@ def build_agent():
         os.environ["OPENAI_API_KEY"] = os.environ["DEEPSEEK_API_KEY"]
     if os.environ.get("DEEPSEEK_BASE_URL") and not os.environ.get("OPENAI_BASE_URL"):
         os.environ["OPENAI_BASE_URL"] = os.environ["DEEPSEEK_BASE_URL"]
-    model_name = os.environ.get("AMI_MODEL", "openai:gpt-4o-mini")
+    model_name = os.environ.get("AMI_LLM_MODEL", "openai:gpt-4o-mini")
     model = init_chat_model(model_name)
     return create_deep_agent(model=model, system_prompt=SYSTEM_PROMPT)
