@@ -1,6 +1,6 @@
-deepagents
 langchain
 langchain-openai
 langchain-deepseek
+langchain-mcp-adapters
 langgraph
 langgraph-cli[inmem]
