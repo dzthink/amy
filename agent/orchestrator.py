@@ -11,7 +11,7 @@ import structlog
 import config
 from .memory import MemorySystem
 from .tools import FileTool, SearchTool
-from .skills import SummarizeSkill
+from .skills import SummarizeSkill, WebSearchSkill
 
 logger = structlog.get_logger(__name__)
 
@@ -45,11 +45,12 @@ class Orchestrator:
         self.file_tool = FileTool()
         self.search_tool = SearchTool()
         self.summarize_skill = SummarizeSkill()
+        self.web_search_skill = WebSearchSkill()
 
         # Initialize LLM
         self.llm = ChatOpenAI(
-            api_key=api_key or os.getenv("OPENAI_API_KEY", ""),
-            base_url=base_url or os.getenv("OPENAI_BASE_URL", ""),
+            api_key=api_key or config.LLM_API_KEY,
+            base_url=base_url or config.LLM_BASE_URL,
             model=model or config.LLM_MODEL,
             max_tokens=max_tokens or config.LLM_MAX_TOKENS,
             temperature=temperature or config.LLM_TEMPERATURE,
@@ -80,6 +81,8 @@ class Orchestrator:
             self.search_tool.grep,
             self.summarize_skill.summarize_text,
             self.summarize_skill.extract_key_points,
+            self.web_search_skill.web_search,
+            self.web_search_skill.web_fetch,
         ]
         return [convert_to_openai_tool(t) for t in tools]
 

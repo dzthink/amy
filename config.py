@@ -10,6 +10,8 @@ import os
 LLM_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
 LLM_MAX_TOKENS = int(os.getenv("OPENAI_MAX_TOKENS", "4096"))
 LLM_TEMPERATURE = float(os.getenv("OPENAI_TEMPERATURE", "0.7"))
+LLM_API_KEY = os.getenv("OPENAI_API_KEY", "")
+LLM_BASE_URL = os.getenv("OPENAI_BASE_URL", "")
 
 # Memory Configuration
 MEMORY_SEMANTIC_FILE = "memory/semantic_memory.md"
